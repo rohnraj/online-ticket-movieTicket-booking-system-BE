@@ -81,29 +81,28 @@ export async function loginUserController(req, res) {
 
 }
 
-export const refreshTokenController = (req, res) => {
+// export const refreshTokenController = (req, res) => {
 
-  const token = req.cookies?.refreshToken;
-    console.log("refresh token", req.cookies)
-  if (!token) return res.status(401).json({ message: "No refresh token provided" });
+//   const token = req.cookies?.refreshToken;
+//     if (!token) return res.status(401).json({ message: "No refresh token provided" });
 
-  jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: "Invalid or expired refresh token" });
+//   jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
+//     if (err) return res.status(403).json({ message: "Invalid or expired refresh token" });
 
-    const accessToken = generateAccessToken(user);
-    console.log("new access token", accessToken)
+//     const accessToken = generateAccessToken(user);
+//     console.log("new access token", accessToken)
     
-    res.cookie("accessToken", accessToken, {
-        httpOnly: true,   // cannot be accessed by JS
-        secure: true,     // only works over https
-        sameSite: "strict", // prevent CSRF
-        maxAge: 15 * 60 * 1000, // 15 minutes
-    });
+//     res.cookie("accessToken", accessToken, {
+//         httpOnly: true,   // cannot be accessed by JS
+//         secure: true,     // only works over https
+//         sameSite: "strict", // prevent CSRF
+//         maxAge: 15 * 60 * 1000, // 15 minutes
+//     });
 
-    res.json({ message: "Access token refreshed successfully" });
+//     res.json({ message: "Access token refreshed successfully" });
 
-  });
-};
+//   });
+// };
 
 export async function logoutController(req, res) {
     res.clearCookie("accessToken");

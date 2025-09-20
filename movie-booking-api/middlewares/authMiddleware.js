@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { refreshTokenController } from "../utiles/generateJWTToken.js";
 
 export const authMiddleware = (req, res, next) => {
 //   const authHeader = req.headers["authorization"];
@@ -8,13 +9,17 @@ export const authMiddleware = (req, res, next) => {
     console.log("token", req.cookies)
 
   if (!token) {
-    refreshTokenController()
+    refreshTokenController(req, res, next);
+  }else {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        // refreshTokenController(req, res, next);
+        return res.status(403).json({ message: "Invalid or expired token" });
+      }
+      console.log("user", user)
+      req.user = user;
+      next();
+    });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: "Invalid or expired token" });
-    console.log("user", user)
-    req.user = user;
-    next();
-  });
 };
