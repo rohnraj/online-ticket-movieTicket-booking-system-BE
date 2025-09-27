@@ -41,7 +41,13 @@ export async function loginUserController(req, res) {
 
     try {
 
-        const { email, password } = req.body;
+        const { email, password, role } = req.body;
+
+        //we will redirect admin to admin portal from here
+        // if( role === "admin" ) {
+        //     return res.status(403).redirect();
+        // }
+
         if( !email || !password ) {
             return res.status(400).send({ message: "All fields are required" });
         }
